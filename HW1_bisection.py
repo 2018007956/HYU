@@ -1,4 +1,3 @@
-
 def f(x):
     return 5*pow(x,4)-22.4*pow(x,3)+15.85272*pow(x,2)+24.161472*x-23.4824832
 
@@ -21,6 +20,3 @@ def bisection(xl, xu, tol):
 
 root = bisection(xl, xu, 0.0000000001)
 print('root: ', root)
-
-
-
