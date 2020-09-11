@@ -1,3 +1,4 @@
+# Newton Method
 # using exact 1st and 2nd derivatives to find minimum
 import matplotlib.pyplot as plt
 import numpy as np

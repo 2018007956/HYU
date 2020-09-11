@@ -1,4 +1,4 @@
-# Bisection Method
+# Bisection Method to find root (Using Bracket)
 def f(x):
     return 5*pow(x,4)-22.4*pow(x,3)+15.85272*pow(x,2)+24.161472*x-23.4824832
 
