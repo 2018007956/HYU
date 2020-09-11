@@ -3,7 +3,7 @@ def f(x):
     return 5*pow(x,4)-22.4*pow(x,3)+15.85272*pow(x,2)+24.161472*x-23.4824832
 
 def derivFunc(x):
-    return 20*pow(x,3)-67.2*pow(x,2)+31.705444*x+24.161472
+    return 20*pow(x,3)-67.2*pow(x,2)+31.70544*x+24.161472
 
 def newtonRaphson(x):
     dx = f(x) / derivFunc(x)
@@ -14,10 +14,8 @@ def newtonRaphson(x):
         x = x - dx
     print("root : ", x)
 
-
-g = int(input('Initial guess : '))  # Initial guess
+g = int(input('Initial guess : '))  
 newtonRaphson(g)
-
 
 # 허용오차를 0.00000001 이렇게만 해줘도
 # -1.04400000000000~ 파이썬이 출력하는 자릿수까지 0이 채워져서

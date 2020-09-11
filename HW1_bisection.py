@@ -21,4 +21,3 @@ def bisection(xl, xu):
 
 root = bisection(xl, xu)
 print('root: ', root)
-
