@@ -48,7 +48,7 @@ plt.plot(a,b,'r')
 # sample data 좌표 표시
 plt.scatter(matrix[:,0],matrix[:,1])
 
-#plt.show()
+plt.show()
 
 
 # error 구하기
