@@ -267,25 +267,20 @@ def gbfs(maze,k,m,n,key,goal):
             dic[(i - 1, j)]=h([i - 1, j], goal)
 
         mh = MinHeap()
-        num = 0
         keydic = {}
         for key, value in dic.items():
             if list(key) not in visited:
                 keydic[key] = value
                 mh.insert(value)
 
-                # # stuck인 상황은 인접노드만 mh에 넣음
+                # stuck인 경우
                 if len(predic) == len(dic):
                     stuck_num += 1
-                    # 만약 인접노드가 존재하면 mh에 인접노드만 남긴다
-                    # 인접노드의 순번은 num-1
-                    num += 1
                     if len(mh.queue) > 0:
                         if stuck_num != 0:
                             for _ in range(len(mh.queue) - 1):
                                 time += 1
                                 tmp = mh.delete()
-                                # 근처노드면 다시 넣음
                                 x = invkeydic.get(tmp)
                                 never.append(x)
                                 if x in keydic:
@@ -357,7 +352,6 @@ def a_star(maze,k,m,n,key,goal):
             dic[(i - 1, j)] = distance[i - 1][j] + h([i - 1, j], goal)
 
         mh = MinHeap()
-        num = 0
         keydic = {}
         for key, value in dic.items():
             if list(key) not in visited:
@@ -365,7 +359,6 @@ def a_star(maze,k,m,n,key,goal):
                 mh.insert(value)
                 if len(predic) == len(dic):
                     stuck_num += 1
-                    num += 1
                     if len(mh.queue) > 0:
                         if stuck_num != 0:
                             for _ in range(len(mh.queue) - 1):
