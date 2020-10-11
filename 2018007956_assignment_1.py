@@ -255,7 +255,7 @@ def gbfs(maze,k,m,n,key,goal):
         stuck_num = 0
         # 방문한 적이 없고 방문한 노드의 인접노드라 리스트에 들어간적 없는 노드-> 완전 new node
         # 네 방향을 다 탐색하고, manhattan distance가 가장 작은 값을 먼저 탐색
-        print('현재위치:', [i,j])
+        #print('현재위치:', [i,j])
         predic = dic.copy()
         if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited and [i + 1, j] not in never:
             dic[i + 1, j] = h([i + 1, j], goal)
@@ -339,9 +339,7 @@ def a_star(maze,k,m,n,key,goal):
     i, j = 0, 1  # 초기 시작 위치
     while True:
         stuck_num = 0
-        # 방문한 적이 없고 방문한 노드의 인접노드라 리스트에 들어간적 없는 노드-> 완전 new node
-        # 네 방향을 다 탐색하고, manhattan distance가 가장 작은 값을 먼저 탐색
-        print('현재위치:', [i, j])
+        #print('현재위치:', [i, j])
         predic = dic.copy()
         if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited and [i + 1, j] not in never:
             distance[i + 1][j] = distance[i][j] + 1
