@@ -25,7 +25,7 @@ def bestPath(visited,i,j):
 def bfs(maze,k,m,n,key,goal):
     visited = []
     queue = [[0, 1]]  # 시작 노드 추가/ 방문이 필요한 노드들에 대한 정보 (Fringe : 노드가 나오긴 했지만 아직 펼쳐지지 않은 노드들)
-
+    
     while queue:
         [i, j] = queue.pop(0)
         visited.append([i, j])
