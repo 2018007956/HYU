@@ -25,7 +25,7 @@ def bestPath(visited,i,j):
 def bfs(maze,k,m,n,key,goal):
     visited = []
     queue = [[0, 1]]  # 시작 노드 추가/ 방문이 필요한 노드들에 대한 정보 (Fringe : 노드가 나오긴 했지만 아직 펼쳐지지 않은 노드들)
-    
+
     while queue:
         [i, j] = queue.pop(0)
         visited.append([i, j])
@@ -72,12 +72,9 @@ def stuck(i,j,length,time, data):
     maze[i][j] = 2
     length -= 1
     # pop 후에는 다른 방향으로 가야함 -> never list 사용
-    # 전상태가 왼,오로 이동하던 것이었다면
+    # 전 상태가 왼,오로 이동하던 것이었다면
     if [i,j-1] == data[-1] or [i,j+1] == data[-1]:
-        #print('왼 또는 오로 이동하던중 막힘')
         while len(data)>1 and data[-1][0] == data[-2][0]: # 스택에 최소2개는 있어야 비교가능
-            # 직전에 위 또는 아래로 움직임
-            #print('1)2로 바꿈:',data[-1])
             n=data.pop()
             never.append(n)
             maze[n[0]][n[1]] = 2
@@ -100,9 +97,7 @@ def stuck(i,j,length,time, data):
 
     # 전 상태가 위아래로 이동하던 것이었다면
     if [i-1,j] == data[-1] or [i+1,j] == data[-1]:
-        #print('위 또는 아래로 이동하던중 막힘')
         while len(data)>1 and data[-1][1] == data[-2][1]:
-            #print('2)2로 바꿈:', data[-1])
             n=data.pop()
             never.append(n)
             maze[n[0]][n[1]]=2
@@ -120,7 +115,6 @@ def stuck(i,j,length,time, data):
                 return length,time
         else:
             never.append([i,j])
-        #never.append([i,j])
     return length,time
 
 
@@ -159,7 +153,6 @@ def ids_Clockwise(i,j,length,time, stack, limit):
         time += 1
         j-=1
 
-    #a_sub_b = [x for x in stack if x not in prestack]
     # stack에 append된게 없으면 고립된 상태이므로 방향이 같지 않을때까지 값을 pop한다 - pop된 좌표는 never에 넣는다
     if len(prestack)==len(stack):
         length,time=stuck(i,j,length,time, stack)
@@ -190,10 +183,6 @@ def ids(maze,k,m,n,key,goal):
         else:
             limit+=1
             length,time=ids_Clockwise(i, j,length,time, stack, limit)
-            # print([i, j])
-            # print('never:', never)
-            # #print('limit:',limit)
-            # print('-----')
 
 
 
