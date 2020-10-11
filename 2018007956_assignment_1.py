@@ -118,7 +118,6 @@ def stuck(i,j,length,time, data):
     return length,time
 
 
-
 def ids_Clockwise(i,j,length,time, stack, limit):
     # 시계 방향으로 탐색 12시->3시->6시->9시
     # 위 노드 탐색 (1이 아닌 2 또는 6 또는 4일때만 탐색)
@@ -158,15 +157,14 @@ def ids_Clockwise(i,j,length,time, stack, limit):
         length,time=stuck(i,j,length,time, stack)
     return length,time
 
+
 def ids(maze,k,m,n,key,goal):
-    #visited = []
     stack = [[0, 1]]
 
     limit = 0
     length, time=0,0
     while True:
         [i,j]=stack.pop()
-        #visited.append([i, j])
 
         # 인접한 노드가 4라면 탐색 종료
         if [i,j]==goal:
