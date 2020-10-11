@@ -257,32 +257,26 @@ def gbfs(maze,k,m,n,key,goal):
         # 네 방향을 다 탐색하고, manhattan distance가 가장 작은 값을 먼저 탐색
         print('현재위치:', [i,j])
         predic = dic.copy()
-        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited:# and [i + 1, j] not in never:
+        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited and [i + 1, j] not in never:
             dic[i + 1, j] = h([i + 1, j], goal)
-        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited :#and [i, j + 1] not in never:
+        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited and [i, j + 1] not in never:
             dic[i, j + 1]= h([i, j + 1], goal)
-        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited :#and [i, j - 1] not in never:
+        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited and [i, j - 1] not in never:
             dic[i, j - 1]=h([i, j - 1], goal)
-        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited :#and [i - 1, j] not in never:
+        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited and [i - 1, j] not in never:
             dic[(i - 1, j)]=h([i - 1, j], goal)
 
-        # # dic값을 조정해도, minv을 구하는 minheap mh는 수정이 안된다는 문제점
         mh = MinHeap()
-
         num = 0
         keydic = {}
         for key, value in dic.items():
-            if list(key) not in visited:  # and list(key) not in never:
-                # 현재위치의 인접노드만 min tree에 넣어서 작은값 뽑아냄 -> 고립됐을때 나갈 방법이 없음
-                # if list(key) ==[i+1,j] or list(key)==[i-1,j] or list(key)==[i,j+1] or list(key)==[i,j-1]:
-                # print(key, value)
+            if list(key) not in visited:
                 keydic[key] = value
                 mh.insert(value)
 
                 # # stuck인 상황은 인접노드만 mh에 넣음
                 if len(predic) == len(dic):
                     stuck_num += 1
-                    # never.append([i,j])
                     # 만약 인접노드가 존재하면 mh에 인접노드만 남긴다
                     # 인접노드의 순번은 num-1
                     num += 1
@@ -293,9 +287,11 @@ def gbfs(maze,k,m,n,key,goal):
                                 tmp = mh.delete()
                                 # 근처노드면 다시 넣음
                                 x = invkeydic.get(tmp)
+                                never.append(x)
                                 if x in keydic:
                                     if keydic[x] == tmp:
                                         mh.insert(tmp)
+                                        never.pop()
 
         if len(mh.queue) == 1:  # pop할 값이 없고 none만 있는 경우
             kk = keydic.popitem()  # pop이아니라 그냥 가져만와야하므로
@@ -305,20 +301,20 @@ def gbfs(maze,k,m,n,key,goal):
         minv = mh.delete()  # 가장 작은 값 추출
 
         invkeydic = {v: k for k, v in keydic.items()}
-        print('```', invkeydic)
+        #print('```', invkeydic)
         [i, j] = invkeydic.get(minv)
         visited.append([i, j])
-        print('```', [i, j])
-        maze[i][j] = 5
+        #print('```', [i, j])
         length += 1
         time += 1
+        #print('------',length)
 
         visited.append([i, j])  # 다음으로 방문할 노드 리스트에 넣음
 
         if [i, j] == goal:
             maze[i][j] = 4
-            file = open(
-                'C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_GBFS_output.txt' % (k), 'w')
+            bestPath(visited, i, j)
+            file = open('C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_GBFS_output.txt' % (k), 'w')
             for a in maze:
                 for b in a:
                     file.write(str(b))
@@ -330,7 +326,7 @@ def gbfs(maze,k,m,n,key,goal):
             break
 
     # 최적 경로 표현
-    #bestPath(visited,i,j)
+
 
 # =======================================================================================
 # A* algorithm
@@ -339,7 +335,6 @@ def a_star(maze,k,m,n,key,goal):
     dic = {}
     length, time = 1, 1
     distance = [[0 for columns in range(n)] for rows in range(m)]  # 해당 지점까지의 거리를 담는 리스트
-    # m = len(maze) : # of rows, n = len(maze[0]) : # of columns
     distance[0][0] = 1
     i, j = 0, 1  # 초기 시작 위치
     while True:
@@ -348,33 +343,28 @@ def a_star(maze,k,m,n,key,goal):
         # 네 방향을 다 탐색하고, manhattan distance가 가장 작은 값을 먼저 탐색
         print('현재위치:', [i, j])
         predic = dic.copy()
-        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited:  # and [i + 1, j] not in never:
+        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited and [i + 1, j] not in never:
             distance[i + 1][j] = distance[i][j] + 1
             # f = g + h
             # f = start노드부터 현재노드까지의 distance(정확한 값) + 현재노드부터 goal노드까지의 distance의 추정값(정확한 값X)
             dic[i + 1, j] = distance[i + 1][j]+ h([i + 1, j], goal)
-        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited:  # and [i, j + 1] not in never:
+        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited and [i, j + 1] not in never:
             distance[i][j + 1] = distance[i][j] + 1
             dic[i, j + 1] = distance[i][j + 1] +h([i, j + 1], goal)
-        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited:  # and [i, j - 1] not in never:
+        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited and [i, j - 1] not in never:
             distance[i][j - 1] = distance[i][j] + 1
             dic[i, j - 1] = distance[i][j - 1] +h([i, j - 1], goal)
-        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited:  # and [i - 1, j] not in never:
+        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited and [i - 1, j] not in never:
             distance[i - 1][j] = distance[i][j] + 1
             dic[(i - 1, j)] = distance[i - 1][j] + h([i - 1, j], goal)
 
-        # heuristic_search(i,j,dic,predic,visited,stuck_num,length,time)
-        # # dic값을 조정해도, minv을 구하는 minheap mh는 수정이 안된다는 문제점
         mh = MinHeap()
-
         num = 0
         keydic = {}
         for key, value in dic.items():
             if list(key) not in visited:
                 keydic[key] = value
                 mh.insert(value)
-
-                # # stuck인 상황은 인접노드만 mh에 넣음
                 if len(predic) == len(dic):
                     stuck_num += 1
                     num += 1
@@ -383,34 +373,34 @@ def a_star(maze,k,m,n,key,goal):
                             for _ in range(len(mh.queue) - 1):
                                 time += 1
                                 tmp = mh.delete()
-                                # 근처노드면 다시 넣음
                                 x = invkeydic.get(tmp)
+                                never.append(x)
                                 if x in keydic:
-                                    if keydic[x] == tmp:  # keydic.keys()==x:
+                                    if keydic[x] == tmp:
                                         mh.insert(tmp)
-                                        # never.pop()
+                                        never.pop()
 
-        if len(mh.queue) == 1:  # pop할 값이 없고 none만 있는 경우
-            kk = keydic.popitem()  # pop이아니라 그냥 가져만와야하므로
-            keydic[kk[0]] = kk[1]  # 다시넣음
+        if len(mh.queue) == 1:
+            kk = keydic.popitem()
+            keydic[kk[0]] = kk[1]
             mh.insert(dic.get(kk[0]))
-        minv = mh.delete()  # 가장 작은 값 추출
+
+        minv = mh.delete()
 
         invkeydic = {v: k for k, v in keydic.items()}
-        print('```', invkeydic)
+        #print('```', invkeydic)
         [i, j] = invkeydic.get(minv)
         visited.append([i, j])
-        print('```', [i, j])
-        maze[i][j] = 5
+        #print('```', [i, j])
         length += 1
         time += 1
-        visited.append([i, j])  # 다음으로 방문할 노드 리스트에 넣음
+        visited.append([i, j])
+        #print('------',length)
 
-        print('-----')
         if [i, j] == goal:
             maze[i][j] = 4
-            file = open(
-                'C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_A_star_output.txt' % (k), 'w')
+            bestPath(visited, i, j)
+            file = open('C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_A_star_output.txt' % (k), 'w')
             for a in maze:
                 for b in a:
                     file.write(str(b))
@@ -444,8 +434,8 @@ for i in range(len(maze)):
 
 #bfs(maze,k,m,n,key,goal)
 #ids(maze,k,m,n,key,goal)
-#gbfs(maze,k,m,n,key,goal)
-a_star(maze,k,m,n,key,goal)
+gbfs(maze,k,m,n,key,goal)
+#a_star(maze,k,m,n,key,goal)
 
 
 # for i in maze:
