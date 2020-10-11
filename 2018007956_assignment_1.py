@@ -208,10 +208,7 @@ class MinHeap(object):
         if last_index < 0:
             return
         self.swap(1, last_index) # 마지막 원소와 루트를 바꿔주고 (큰게위로올라오고 제일 작은 값은 밑으로 내려감)
-        #self.queue.pop()
-        #print('queue: ',self.queue)
         minv = self.queue.pop() # 마지막 원소를 제거한다 (제일 작은 값 삭제)
-        #print('minv: ',minv)
         self.minHeapify(1)  # root에서부터 heapify를 시작한다
         return minv
 
@@ -242,9 +239,6 @@ class MinHeap(object):
     def rightchild(self, index):
         return index * 2 + 1
 
-    def printHeap(self):
-        print(self.queue)
-
 
 # Estimate of (optimal) cost from n to goal
 # 네방향으로 이동하니까 distance의 추정값을 manhattan distance로 함
@@ -254,204 +248,182 @@ def h(n, goal):
 
 def gbfs(maze,k,m,n,key,goal):
     visited = [[0,1]]
-    #minheap = [[0, 1]]  # 시작 노드 추가/ 방문이 필요한 노드들에 대한 정보 (Fringe : 노드가 나오긴 했지만 아직 펼쳐지지 않은 노드들)
-    distance = [[0 for columns in range(n)] for rows in range(m)]  # 해당 지점까지의 거리를 담는 리스트
-    # m = len(maze) : # of rows, n = len(maze[0]) : # of columns
-    distance[0][0] = 1
-
     dic = {}
-    #mh = MinHeap()
-
+    length, time =1,1
     i,j=0,1 # 초기 시작 위치
     while True:
         stuck_num = 0
         # 방문한 적이 없고 방문한 노드의 인접노드라 리스트에 들어간적 없는 노드-> 완전 new node
         # 네 방향을 다 탐색하고, manhattan distance가 가장 작은 값을 먼저 탐색
         print('현재위치:', [i,j])
-        print('never:',never)
         predic = dic.copy()
-        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited and [i + 1, j] not in never:
+        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited:# and [i + 1, j] not in never:
             dic[i + 1, j] = h([i + 1, j], goal)
-            #mh.insert(dic[i + 1, j])
-            distance[i + 1][j] = distance[i][j] + 1
-        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited and [i, j + 1] not in never:
+        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited :#and [i, j + 1] not in never:
             dic[i, j + 1]= h([i, j + 1], goal)
-            #mh.insert(dic[i, j + 1])
-            distance[i][j + 1] = distance[i][j] + 1
-        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited and [i, j - 1] not in never:
+        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited :#and [i, j - 1] not in never:
             dic[i, j - 1]=h([i, j - 1], goal)
-            #mh.insert(dic[i, j - 1])
-            distance[i][j - 1] = distance[i][j] + 1
-        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited and [i - 1, j] not in never:
+        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited :#and [i - 1, j] not in never:
             dic[(i - 1, j)]=h([i - 1, j], goal)
-            #mh.insert(dic[i - 1, j])
-            distance[i - 1][j] = distance[i][j] + 1
 
-
-        # dic값을 조정해도, minv을 구하는 minheap mh는 수정이 안된다는 문제점
+        # # dic값을 조정해도, minv을 구하는 minheap mh는 수정이 안된다는 문제점
         mh = MinHeap()
-        print('dic:',dic.items())
-        reverse_dic = {v: k for k, v in dic.items()} #->>같은 키값은 없애버림 하지만 reverse_dic은 최소인 값을 갖는 노드를 추출하는 용도이므로
-                                                    # 같은 값을 가지는 이전 노드는 없어져도 됨.////
 
-        num=0
-        keylist=[]
+        num = 0
+        keydic = {}
         for key, value in dic.items():
-            if list(key) not in visited:# and list(key) not in never:
+            if list(key) not in visited:  # and list(key) not in never:
                 # 현재위치의 인접노드만 min tree에 넣어서 작은값 뽑아냄 -> 고립됐을때 나갈 방법이 없음
-               # if list(key) ==[i+1,j] or list(key)==[i-1,j] or list(key)==[i,j+1] or list(key)==[i,j-1]:
-                print(key, value)
-                keylist.append(key)
+                # if list(key) ==[i+1,j] or list(key)==[i-1,j] or list(key)==[i,j+1] or list(key)==[i,j-1]:
+                # print(key, value)
+                keydic[key] = value
                 mh.insert(value)
 
                 # # stuck인 상황은 인접노드만 mh에 넣음
                 if len(predic) == len(dic):
-                    #print('stuck!!!!!!!!!!!!!!')
-                    stuck_num+=1
+                    stuck_num += 1
+                    # never.append([i,j])
                     # 만약 인접노드가 존재하면 mh에 인접노드만 남긴다
                     # 인접노드의 순번은 num-1
-                    num+=1
-                    if len(mh.queue)>0:
-                        #print('stucknum:',stuck_num)
-                        if stuck_num!=0:
-                            #for _ in range(stuck_num-1):
-                            for _ in range(len(mh.queue)-1):
+                    num += 1
+                    if len(mh.queue) > 0:
+                        if stuck_num != 0:
+                            for _ in range(len(mh.queue) - 1):
+                                time += 1
                                 tmp = mh.delete()
                                 # 근처노드면 다시 넣음
-                                x = reverse_dic.get(tmp)
-                                #print('x:',x)
-                                #print('i,j:',[i,j])
-                                #print('keylist:',keylist)
-                                if keylist[stuck_num-1]==x:
-                                    #if x[0]==i or x[1]==j:
-                                    if abs(x[0]-i)+abs(x[1]-j)<10:
-                                        #print('inininin')
+                                x = invkeydic.get(tmp)
+                                if x in keydic:
+                                    if keydic[x] == tmp:
                                         mh.insert(tmp)
-                            #print('====')
-                            # else:
-                        #     if len(mh.queue)>2:
-                        #         print('heyyyyyyyyyy')
-                        #         mh.delete()
 
-                            # 만약 tmp의 값에 해당하는 좌표가 인접노드라면 다시 넣어주고 끝냄 -> 최소값을 가지는 것은 인접노드가 된다
-                        #print(reverse_dic)
-                        #n = reverse_dic.get(tmp)
-                        #print('n:',n)
-                            # if n = (i+1,j) or n=(i-1,j) or n=(i,j-1) or n=(i,j+1):
-                            #     mh.insert()
-                            #     break
+        if len(mh.queue) == 1:  # pop할 값이 없고 none만 있는 경우
+            kk = keydic.popitem()  # pop이아니라 그냥 가져만와야하므로
+            keydic[kk[0]] = kk[1]  # 다시넣음
+            mh.insert(dic.get(kk[0]))
 
+        minv = mh.delete()  # 가장 작은 값 추출
 
-        # stuck이 되면 min값을 빼는데, mh에 인접노드가 있으면 글로 가야됨!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # if len(predic) == len(dic):
-        #     print('stuck!!!!!!!!!!!!!!')
+        invkeydic = {v: k for k, v in keydic.items()}
+        print('```', invkeydic)
+        [i, j] = invkeydic.get(minv)
+        visited.append([i, j])
+        print('```', [i, j])
+        maze[i][j] = 5
+        length += 1
+        time += 1
 
-        print('min값 빼기 전 mh:',mh.queue)
-        minv = mh.delete() # 가장 작은 값 추출
-        # value를 이용해 key를 찾기 위해 {key,value}를 뒤집어{value:key}로 저장하고 찾는다
-        #reverse_mh = {v:k for k,v in dic.items()}
-        #print('mh:',mh.queue)
-        print('minv:', minv)
+        visited.append([i, j])  # 다음으로 방문할 노드 리스트에 넣음
 
-        # 쓰인 값은 dic에서 지워버림
-        dic = {k:v for k,v in dic.items() if k not in visited}
-        reverse_dic = {v: k for k, v in dic.items()}
-        [i, j] = reverse_dic.get(minv)  # 가장 작은 distance를 가지는 좌표 반환-
-        print('방문한좌표는바로빼버리는dic:',dic)
-        print('visited i,j:',[i,j])
-
-        print('stucknum:',stuck_num)
-        # # 방문했던 i,j가 추출된다면, 루프에 빠진 것이므로 mh.delete를 한번해준다
-        #if [i, j] in visited:
-        #     print('이미있다!!!!!!!!!!!!!!!!!!!!!1')
-        #     mh.delete()
-        #     minv = mh.delete()
-        #     print('다시뺌minv:',minv)
-        #     print('mh:',mh.queue)
-        #     [i, j] = reverse_dic.get(minv)
-
-        print('visited:',visited)
-        visited.append([i, j]) # 다음으로 방문할 노드 리스트에 넣음
-
-
-
-
-        print('-----')
-        # 4라면 탐색 종료
-        if [i,j]==goal:
-            file = open('C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_GBFS_output.txt' % (k), 'w')
+        if [i, j] == goal:
+            maze[i][j] = 4
+            file = open(
+                'C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_GBFS_output.txt' % (k), 'w')
             for a in maze:
                 for b in a:
-                    print(b,end=' ')
-                print()
-                #     file.write(str(b))
-                # file.write('\n')
-            # file.write('---\n')
-            # file.write('length=' + str(length) + '\n')  # distance[i][j]=length 같음 distance굳이 쓸 필요X
-            # file.write("time=" + str(time))
-            # file.close()
+                    file.write(str(b))
+                file.write('\n')
+            file.write('---\n')
+            file.write('length=' + str(length) + '\n')  # distance[i][j]=length 같음 distance굳이 쓸 필요X
+            file.write("time=" + str(time))
+            file.close()
             break
 
     # 최적 경로 표현
-    bestPath(visited,i,j)
+    #bestPath(visited,i,j)
 
 # =======================================================================================
 # A* algorithm
-def a_star(maze,m,n,key,goal):
-    distance = [[0 for columns in range(n)] for rows in range(m)]
-    distance[0][0] = 1
-
-    visited = []
+def a_star(maze,k,m,n,key,goal):
+    visited = [[0, 1]]
     dic = {}
-    mh = MinHeap()
+    length, time = 1, 1
+    distance = [[0 for columns in range(n)] for rows in range(m)]  # 해당 지점까지의 거리를 담는 리스트
+    # m = len(maze) : # of rows, n = len(maze[0]) : # of columns
+    distance[0][0] = 1
     i, j = 0, 1  # 초기 시작 위치
     while True:
+        stuck_num = 0
         # 방문한 적이 없고 방문한 노드의 인접노드라 리스트에 들어간적 없는 노드-> 완전 new node
         # 네 방향을 다 탐색하고, manhattan distance가 가장 작은 값을 먼저 탐색
-        # print('visited:',visited)
-        # print('minheap:',mh.queue)
-        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited:  # and [i + 1, j] not in minheap:
+        print('현재위치:', [i, j])
+        predic = dic.copy()
+        if i < m - 1 and maze[i + 1][j] != 1 and [i + 1, j] not in visited:  # and [i + 1, j] not in never:
             distance[i + 1][j] = distance[i][j] + 1
             # f = g + h
             # f = start노드부터 현재노드까지의 distance(정확한 값) + 현재노드부터 goal노드까지의 distance의 추정값(정확한 값X)
-            dic[i + 1, j] = distance[i + 1][j] + h([i + 1, j], goal)
-            mh.insert(dic[i + 1, j])
-        # distance[i + 1][j] = distance[i][j] + 1
-        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited:  # and [i, j + 1] not in minheap:
+            dic[i + 1, j] = distance[i + 1][j]+ h([i + 1, j], goal)
+        if j < n - 1 and maze[i][j + 1] != 1 and [i, j + 1] not in visited:  # and [i, j + 1] not in never:
             distance[i][j + 1] = distance[i][j] + 1
-            dic[i, j + 1] = distance[i][j + 1] + h([i, j + 1], goal)
-            mh.insert(dic[i, j + 1])
-            # distance[i][j + 1] = distance[i][j] + 1
-        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited:  # and [i, j - 1] not in minheap:
+            dic[i, j + 1] = distance[i][j + 1] +h([i, j + 1], goal)
+        if j > 0 and maze[i][j - 1] != 1 and [i, j - 1] not in visited:  # and [i, j - 1] not in never:
             distance[i][j - 1] = distance[i][j] + 1
-            dic[i, j - 1] = distance[i][j - 1] + h([i, j - 1], goal)
-            mh.insert(dic[i, j - 1])
-        # distance[i][j - 1] = distance[i][j] + 1
-        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited:  # and [i - 1, j] not in minheap:
+            dic[i, j - 1] = distance[i][j - 1] +h([i, j - 1], goal)
+        if i > 0 and maze[i - 1][j] != 1 and [i - 1, j] not in visited:  # and [i - 1, j] not in never:
             distance[i - 1][j] = distance[i][j] + 1
             dic[(i - 1, j)] = distance[i - 1][j] + h([i - 1, j], goal)
-            mh.insert(dic[i - 1, j])
-            # distance[i - 1][j] = distance[i][j] + 1
-        print(dic)
-        print('mh: ',mh.queue)
+
+        # heuristic_search(i,j,dic,predic,visited,stuck_num,length,time)
+        # # dic값을 조정해도, minv을 구하는 minheap mh는 수정이 안된다는 문제점
+        mh = MinHeap()
+
+        num = 0
+        keydic = {}
+        for key, value in dic.items():
+            if list(key) not in visited:
+                keydic[key] = value
+                mh.insert(value)
+
+                # # stuck인 상황은 인접노드만 mh에 넣음
+                if len(predic) == len(dic):
+                    stuck_num += 1
+                    num += 1
+                    if len(mh.queue) > 0:
+                        if stuck_num != 0:
+                            for _ in range(len(mh.queue) - 1):
+                                time += 1
+                                tmp = mh.delete()
+                                # 근처노드면 다시 넣음
+                                x = invkeydic.get(tmp)
+                                if x in keydic:
+                                    if keydic[x] == tmp:  # keydic.keys()==x:
+                                        mh.insert(tmp)
+                                        # never.pop()
+
+        if len(mh.queue) == 1:  # pop할 값이 없고 none만 있는 경우
+            kk = keydic.popitem()  # pop이아니라 그냥 가져만와야하므로
+            keydic[kk[0]] = kk[1]  # 다시넣음
+            mh.insert(dic.get(kk[0]))
         minv = mh.delete()  # 가장 작은 값 추출
-        print('min:',minv)
-        # value를 이용해 key를 찾기 위해 {key,value}를 뒤집어{value:key}로 저장하고 찾는다
-        reverse_mh = {v: k for k, v in dic.items()}
-        print('re: ',reverse_mh)
-        [i, j] = reverse_mh.get(minv)  # 가장 작은 distance를 가지는 좌표 반환
-        print([i,j])
+
+        invkeydic = {v: k for k, v in keydic.items()}
+        print('```', invkeydic)
+        [i, j] = invkeydic.get(minv)
+        visited.append([i, j])
+        print('```', [i, j])
+        maze[i][j] = 5
+        length += 1
+        time += 1
         visited.append([i, j])  # 다음으로 방문할 노드 리스트에 넣음
-        maze[i][j] = 5  ###### 고립된 부분까지 5로 변경됨. visited한 곳이니까######
 
         print('-----')
-        # 4라면 탐색 종료
         if [i, j] == goal:
-            return
+            maze[i][j] = 4
+            file = open(
+                'C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_%d_A_star_output.txt' % (k), 'w')
+            for a in maze:
+                for b in a:
+                    file.write(str(b))
+                file.write('\n')
+            file.write('---\n')
+            file.write('length=' + str(length) + '\n')  # distance[i][j]=length 같음 distance굳이 쓸 필요X
+            file.write("time=" + str(time))
+            file.close()
+            break
 
 
 # =======================================================================================
-with open("C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_4.txt","r") as file:
+with open("C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_1.txt","r") as file:
     k,m,n = map(int, file.readline().split())
     maze = []
     for line in file:
@@ -472,8 +444,8 @@ for i in range(len(maze)):
 
 #bfs(maze,k,m,n,key,goal)
 #ids(maze,k,m,n,key,goal)
-gbfs(maze,k,m,n,key,goal)
-#a_star(maze,k,m,n,key,goal)
+#gbfs(maze,k,m,n,key,goal)
+a_star(maze,k,m,n,key,goal)
 
 
 # for i in maze:
