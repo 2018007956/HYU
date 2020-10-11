@@ -320,9 +320,6 @@ def gbfs(maze,k,m,n,key,goal):
             file.close()
             break
 
-    # 최적 경로 표현
-
-
 # =======================================================================================
 # A* algorithm
 def a_star(maze,k,m,n,key,goal):
@@ -427,10 +424,4 @@ for i in range(len(maze)):
 #ids(maze,k,m,n,key,goal)
 gbfs(maze,k,m,n,key,goal)
 #a_star(maze,k,m,n,key,goal)
-
-
-# for i in maze:
-#     for j in i:
-#         print(j,end=' ')
-#     print()
 
