@@ -401,7 +401,7 @@ def a_star(maze,k,m,n,key,goal):
 
 
 # =======================================================================================
-with open("C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_1.txt","r") as file:
+with open("C:\\Users\\LG\\Desktop\\Artificial_Intelligence_assignment_1\\Maze_2.txt","r") as file:
     k,m,n = map(int, file.readline().split())
     maze = []
     for line in file:
