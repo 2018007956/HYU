@@ -86,5 +86,3 @@ for testimg in images:
     img_num += 1
 
 print('100번의 횟수 중 패턴을 잘 인식한 횟수:',hit_num)
-
-
