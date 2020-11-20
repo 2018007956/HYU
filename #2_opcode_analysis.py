@@ -79,5 +79,3 @@ for i in range(len(analysis)):
 
 print('정상파일 개수:',notmal)
 print('악성파일 개수:',malware)
-
-
