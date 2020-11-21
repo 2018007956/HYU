@@ -9,7 +9,7 @@ img = cv2.imread(path,cv2.IMREAD_COLOR)
 b,g,r = cv2.split(img)
 
 # 가로, 세로 픽셀을 0으로 채우고, 채널을 빨강, 초록, 파랑으로
-# zeros = np.zeros(img.shape[:2], dtype = "uint8")
+zeros = np.zeros(img.shape[:2], dtype = "uint8")
 # cv2.imshow('Red',cv2.merge([zeros, zeros, r]))
 # cv2.waitKey()
 # cv2.imshow('Green',cv2.merge([zeros, g, zeros]))
@@ -37,12 +37,9 @@ corr2 = df2.corr(method = 'pearson')
 corr3 = df3.corr(method = 'pearson')
 
 
-# print(corr)
-# print()
-# print(corr2)
-# print()
-# print(corr3)
-# print()
+print(corr)
+print(corr2)
+print(corr3)
 
 # YUV correlation coefficients
 img_yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
@@ -66,15 +63,11 @@ df3 = pd.DataFrame({'u':u, 'v':v})
 corr = df.corr(method = 'pearson')
 corr2 = df2.corr(method = 'pearson')
 corr3 = df3.corr(method = 'pearson')
-# print(corr)
-# print()
-# print(corr2)
-# print()
-# print(corr3)
 
-# dff = pd.DataFrame({'g':g,'y':y})
-# corrr = dff.corr(method = 'pearson')
-# print(corrr)
+print(corr)
+print(corr2)
+print(corr3)
 
-
-# img = [cv2.imread(i,cv2.IMREAD_COLOR) for i in glob.glob(path)]
+dff = pd.DataFrame({'g':g,'y':y})
+corrr = dff.corr(method = 'pearson')
+print(corrr)
