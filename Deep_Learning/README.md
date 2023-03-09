@@ -1,6 +1,6 @@
 # Deep Learning Methods and Applications
 
-12352/2023-Spring
+[12352] 2023-Spring  
 Prof. Choi yong seok
 
 ## Lecture topic

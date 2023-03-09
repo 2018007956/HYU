@@ -1,6 +1,6 @@
 # Data Science
 
-12349/2023-Spring
+[12349] 2023-Spring  
 Prof. Chae dong gyu
 
 ## Main Subject
