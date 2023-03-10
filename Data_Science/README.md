@@ -1,7 +1,7 @@
 # Data Science
 
 [12349] 2023-Spring  
-Prof. Chae dong gyu
+Prof. Dong gyu Chae
 
 ## Main Subject
 - Data Preprocessing
