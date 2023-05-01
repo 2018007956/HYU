@@ -7,4 +7,4 @@ python dt.py dt_train.txt dt_test.txt dt_result.txt
 ```
 
 ## Results
-When the minimum gain is len(training_data)*0.00007, the result of the file dt_test1.txt: 314 / 346 
+When the minimum gain is len(training_data)*0.00007, the result of the file dt_test1.txt is 314 / 346 

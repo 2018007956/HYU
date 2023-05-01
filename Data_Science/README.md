@@ -15,6 +15,6 @@ Prof. Dong gyu Chae
 - Recommendation
 
 ## Assignments
-[x] Frequent pattern mining: Apriori
-[x] Classification: Decision tree
-[x] Clustering: DBSCAN
+- [x] Frequent pattern mining: Apriori
+- [x] Classification: Decision tree  
+- [x] Clustering: DBSCAN
