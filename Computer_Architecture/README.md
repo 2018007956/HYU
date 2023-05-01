@@ -1,13 +1,13 @@
-# Data Science
+# Computer Architecture
 
-[12328] 2023-Spring  
+[ITE2031] 2023-Spring  
 Prof. Woong Sul
 
 ## Main Subject
 1. Fundamental concepts in Computer Science and Engineering
-- What are Computer Science, Computer Scientist, and Computer Architecture?
+   What are Computer Science, Computer Scientist, and Computer Architecture?
 2. What is the machine called computer?
-- Basic organization, operation, principles and history
+   Basic organization, operation, principles and history
 3. Computer performance benchmarking and instruction set design
 4. RISC (MIPS) machine instructions (hardware-software interface)
 5. Processor internal design (data path and control, pipelining, cache memory)
